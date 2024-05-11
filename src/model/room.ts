@@ -12,15 +12,6 @@ export enum RoomStatus {
   CANCEL = "cancel",
 }
 
-export type Room = {
-  roomId: string;
-  type: RoomType;
-  status: RoomStatus;
-  player1: string;
-  player2?: string;
-  turn: string;
-};
-
 export const roomSchema = new Schema({
   roomId: { type: String, required: true },
   type: {

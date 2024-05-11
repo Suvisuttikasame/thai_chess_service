@@ -4,14 +4,15 @@ import { DefaultEventsMap } from "socket.io/dist/typed-events";
 import Player, { Side } from "../../model/player";
 
 export const findOpponentEvent = async (
-  data: string,
+  data: { playerId: string },
   socket:
     | any[]
     | Socket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>,
   io: Server<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>
 ) => {
   let player;
-  const jsonData: { playerId: string } = JSON.parse(data);
+  // const jsonData: { playerId: string } = JSON.parse(data);
+  const jsonData = data;
   // find the 'find-opponent' room that empty
   const emptyRoom = await Room.findOne({
     status: RoomStatus.EMPTY,
@@ -19,6 +20,15 @@ export const findOpponentEvent = async (
 
   //if it's existed, join room start game
   if (emptyRoom !== null) {
+    //prevent access same owner room
+    if (emptyRoom.roomId === jsonData.playerId) {
+      socket.join(emptyRoom.roomId);
+      io.to(emptyRoom.roomId).emit("create-room-success", {
+        roomId: emptyRoom.roomId,
+        message: "waiting for opponent...",
+      });
+      return;
+    }
     const existPlayer = await Player.findOne({
       playerId: jsonData.playerId,
     });
@@ -35,7 +45,7 @@ export const findOpponentEvent = async (
     await emptyRoom.save();
 
     socket.join(emptyRoom.roomId);
-    io.emit("join-room-success", {
+    io.to(emptyRoom.roomId).emit("join-room-success", {
       roomId: emptyRoom.roomId,
       message: "Let have fun!",
     });
@@ -66,7 +76,7 @@ export const findOpponentEvent = async (
     },
   });
   socket.join(player.playerId);
-  io.emit("create-room-success", {
+  io.to(player.playerId).emit("create-room-success", {
     roomId: player.playerId,
     message: "waiting for opponent...",
   });
