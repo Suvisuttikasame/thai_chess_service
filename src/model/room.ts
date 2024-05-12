@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { playerSchema } from "./player";
+import { Side, playerSchema } from "./player";
 
 export enum RoomType {
   FIND_OPP = "find-opponent",
@@ -11,6 +11,206 @@ export enum RoomStatus {
   FULL = "full",
   CANCEL = "cancel",
 }
+
+export const initBoard: {
+  id: Number;
+  pieceName: String;
+  position: Number;
+  side: String;
+}[] = [
+  {
+    id: 1,
+    pieceName: "rook",
+    position: 1,
+    side: Side.WHITE,
+  },
+  {
+    id: 2,
+    pieceName: "knight",
+    position: 2,
+    side: Side.WHITE,
+  },
+  {
+    id: 3,
+    pieceName: "bishop",
+    position: 3,
+    side: Side.WHITE,
+  },
+  {
+    id: 4,
+    pieceName: "king",
+    position: 4,
+    side: Side.WHITE,
+  },
+  {
+    id: 5,
+    pieceName: "queen",
+    position: 5,
+    side: Side.WHITE,
+  },
+  {
+    id: 6,
+    pieceName: "bishop",
+    position: 6,
+    side: Side.WHITE,
+  },
+  {
+    id: 7,
+    pieceName: "knight",
+    position: 7,
+    side: Side.WHITE,
+  },
+  {
+    id: 8,
+    pieceName: "rook",
+    position: 8,
+    side: Side.WHITE,
+  },
+  {
+    id: 9,
+    pieceName: "pawn",
+    position: 17,
+    side: Side.WHITE,
+  },
+  {
+    id: 10,
+    pieceName: "pawn",
+    position: 18,
+    side: Side.WHITE,
+  },
+  {
+    id: 11,
+    pieceName: "pawn",
+    position: 19,
+    side: Side.WHITE,
+  },
+  {
+    id: 12,
+    pieceName: "pawn",
+    position: 20,
+    side: Side.WHITE,
+  },
+  {
+    id: 13,
+    pieceName: "pawn",
+    position: 21,
+    side: Side.WHITE,
+  },
+  {
+    id: 14,
+    pieceName: "pawn",
+    position: 22,
+    side: Side.WHITE,
+  },
+  {
+    id: 15,
+    pieceName: "pawn",
+    position: 23,
+    side: Side.WHITE,
+  },
+  {
+    id: 16,
+    pieceName: "pawn",
+    position: 24,
+    side: Side.WHITE,
+  },
+  {
+    id: 17,
+    pieceName: "pawn",
+    position: 41,
+    side: Side.BLACK,
+  },
+  {
+    id: 18,
+    pieceName: "pawn",
+    position: 42,
+    side: Side.BLACK,
+  },
+  {
+    id: 19,
+    pieceName: "pawn",
+    position: 43,
+    side: Side.BLACK,
+  },
+  {
+    id: 20,
+    pieceName: "pawn",
+    position: 44,
+    side: Side.BLACK,
+  },
+  {
+    id: 21,
+    pieceName: "pawn",
+    position: 45,
+    side: Side.BLACK,
+  },
+  {
+    id: 22,
+    pieceName: "pawn",
+    position: 46,
+    side: Side.BLACK,
+  },
+  {
+    id: 23,
+    pieceName: "pawn",
+    position: 47,
+    side: Side.BLACK,
+  },
+  {
+    id: 24,
+    pieceName: "pawn",
+    position: 48,
+    side: Side.BLACK,
+  },
+  {
+    id: 25,
+    pieceName: "rook",
+    position: 57,
+    side: Side.BLACK,
+  },
+  {
+    id: 26,
+    pieceName: "knight",
+    position: 58,
+    side: Side.BLACK,
+  },
+  {
+    id: 27,
+    pieceName: "bishop",
+    position: 59,
+    side: Side.BLACK,
+  },
+  {
+    id: 28,
+    pieceName: "queen",
+    position: 60,
+    side: Side.BLACK,
+  },
+  {
+    id: 29,
+    pieceName: "king",
+    position: 61,
+    side: Side.BLACK,
+  },
+  {
+    id: 30,
+    pieceName: "bishop",
+    position: 62,
+    side: Side.BLACK,
+  },
+  {
+    id: 31,
+    pieceName: "knight",
+    position: 63,
+    side: Side.BLACK,
+  },
+  {
+    id: 32,
+    pieceName: "rook",
+    position: 64,
+    side: Side.BLACK,
+  },
+];
 
 export const roomSchema = new Schema({
   roomId: { type: String, required: true },
@@ -30,7 +230,7 @@ export const roomSchema = new Schema({
     player: playerSchema,
   },
   currentBoard: {
-    type: [{ pieceName: String, position: String, side: String }],
+    type: [{ id: Number, pieceName: String, position: Number, side: String }],
     required: true,
   },
 });

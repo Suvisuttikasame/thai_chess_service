@@ -1,4 +1,4 @@
-import Room, { RoomStatus, RoomType } from "../../model/room";
+import Room, { RoomStatus, RoomType, initBoard } from "../../model/room";
 import { Server, Socket } from "socket.io";
 import { DefaultEventsMap } from "socket.io/dist/typed-events";
 import Player, { Side } from "../../model/player";
@@ -42,11 +42,12 @@ export const findOpponentEvent = async (
     }
     emptyRoom.player2 = player;
     emptyRoom.status = RoomStatus.FULL;
-    await emptyRoom.save();
+    const readyRoom = await emptyRoom.save();
 
     socket.join(emptyRoom.roomId);
     io.to(emptyRoom.roomId).emit("join-room-success", {
       roomId: emptyRoom.roomId,
+      room: readyRoom,
       message: "Let have fun!",
     });
 
@@ -69,7 +70,7 @@ export const findOpponentEvent = async (
     roomId: player.playerId,
     type: RoomType.FIND_OPP,
     status: RoomStatus.EMPTY,
-    currentBoard: [],
+    currentBoard: initBoard,
     player1: player,
     turn: {
       player,
